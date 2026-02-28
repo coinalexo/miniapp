@@ -3,28 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://unpkg.com/@walletconnect/sign-client@2.11.0/dist/index.umd.js"></script>
 </head>
 <body>
   <h2>🚀 Fast Buy Mini App</h2>
 
-  <button onclick="connect()">Connect Phantom</button>
-  <button onclick="buy()">FAST BUY</button>
+  <button onclick="connectWallet()">Connect Wallet</button>
+  <button onclick="fastBuy()">FAST BUY 0.1 SOL</button>
 
   <script>
-    function connect() {
-      alert("Phantom connect будет на следующем шаге");
+    let client;
+    let session;
+
+    async function connectWallet() {
+      client = await window.WalletConnectSignClient.init({
+        projectId: "demo", // для теста
+        metadata: {
+          name: "Fast Buy App",
+          description: "Solana sniper",
+          url: window.location.origin,
+          icons: []
+        }
+      });
+
+      const { uri, approval } = await client.connect({
+        requiredNamespaces: {
+          solana: {
+            methods: ["solana_signTransaction"],
+            chains: ["solana:mainnet"],
+            events: []
+          }
+        }
+      });
+
+      if (uri) {
+        // откроет Phantom для подключения
+        window.open(uri, "_blank");
+      }
+
+      session = await approval();
+      alert("Wallet connected!");
     }
 
+    async function fastBuy() {
+      if (!session) {
+        alert("Connect wallet first");
+        return;
+      }
 
-function buy() {
-  const usdc = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
-
-  const link = `https://phantom.app/ul/v1/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=${usdc}`;
-
-  window.open(link, "_blank");
-}
-
+      alert("Здесь будет Jupiter TX на следующем шаге");
+    }
   </script>
 </body>
-
 </html>
