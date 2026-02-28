@@ -15,9 +15,16 @@
       alert("Phantom connect будет на следующем шаге");
     }
 
-    function buy() {
-      alert("FAST BUY будет на следующем шаге");
-    }
+
+function buy() {
+  const usdc = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+
+  const link = `https://phantom.app/ul/v1/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=${usdc}`;
+
+  window.open(link, "_blank");
+}
+
   </script>
 </body>
+
 </html>
